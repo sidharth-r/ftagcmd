@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include <string>
-#include <vector>
 
 #ifdef FTAGLIB_EXPORTS
 #    define EXPIMP __declspec(dllexport)
@@ -11,6 +10,8 @@
 #    define EXPIMP __declspec(dllimport)
 #    define EXPIMP_STL extern
 #endif
+
+#define DB_NAME "ftag.db"
 
 using namespace std;
 
@@ -41,6 +42,8 @@ public:
 	int get_tag_count();
 	vector<Tag> get_tags();
 	int find_tag(LPWSTR tagName);
+	void save(FILE* file);
+	void load(FILE* file);
 };
 
 class EXPIMP TaggedFile
@@ -57,6 +60,8 @@ public:
 	int get_tag_count();
 	vector<Tag> get_tags();
 	int find_tag(LPWSTR tagName, int gid);
+	void save(FILE* file);
+	void load(FILE* file);
 };
 
 EXPIMP_STL template class EXPIMP vector<TagGroup>;
@@ -85,8 +90,11 @@ public:
 	void remove_tag_from_file(LPWSTR fileName, LPWSTR groupName, LPWSTR tagName);
 	//Returns list of filenames as vector of LPWSTRs
 	vector<LPWSTR> filter(LPWSTR groupName, LPWSTR tagName);
+	void save_db();
+	bool load_db();
 	void DEBUG_info();
 };
+
 
 extern "C" EXPIMP TagDB* CreateTagDbInstance(LPWSTR name, LPWSTR path);
 extern "C" EXPIMP TagDB* CreateTagDbEmptyInstance();
